@@ -1,4 +1,8 @@
 ﻿
+using HtmlAgilityPack;
+using System.Net;
+using System.Text.RegularExpressions;
+
 namespace Blog_Content_Crowler
 {
     partial class MainForm
@@ -32,7 +36,36 @@ namespace Blog_Content_Crowler
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.Text = "Blog-Content-Crowker";
+
+            WebClient wc = new WebClient();
+            //wc.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)"); // MSIE
+            wc.Headers.Add("user-agent", "Mozilla / 5.0(Windows NT 10.0; Win64; x64) AppleWebKit / 537.36(KHTML, like Gecko) Chrome / 123.0.0.0 Safari / 537.36");
+
+            wc.Encoding = System.Text.Encoding.UTF8;
+            //string html = wc.DownloadString(@"https://blog.naver.com/ahnshy/223380673641");
+            string html = wc.DownloadString(@"https://blog.naver.com/PostView.naver?blogId=ahnshy&logNo=223221850917&redirect=Dlog&widgetTypeCall=true&noTrackingCode=true&directAccess=false");
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            //var htmlNode = doc.DocumentNode.SelectNodes("//div[@id='postListBody']");
+            var htmlNode = doc.DocumentNode.SelectNodes("//div[@class='se-main-container']");
+
+            var html2 = doc.DocumentNode.SelectSingleNode("//div[@class='se-main-container']").OuterHtml;
+
+
+            var text = doc.DocumentNode.SelectSingleNode("//div[@class='se-main-container']").InnerText;
+
+            int a = 0;
+
+
+            //var numNodes = htmlNode.("li");
+            //foreach (var item in numNodes)
+            {
+                text = Regex.Replace(text, @"&lt;", "<");
+                text = Regex.Replace(text, @"&gt;", ">");
+            }
         }
 
         #endregion
